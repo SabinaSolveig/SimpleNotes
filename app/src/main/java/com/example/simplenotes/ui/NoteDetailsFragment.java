@@ -1,7 +1,6 @@
-package com.example.simplenotes;
+package com.example.simplenotes.ui;
 
 import android.content.Context;
-import android.media.Image;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.simplenotes.R;
 import com.example.simplenotes.domain.Note;
 
 public class NoteDetailsFragment extends Fragment implements Observer {
@@ -72,9 +72,13 @@ public class NoteDetailsFragment extends Fragment implements Observer {
         title = view.findViewById(R.id.note_name);
 
         Note note = getArguments().getParcelable(ARG_NOTE);
+        if (note != null) {
+            //imageView = view.findViewById(R.id.image);
+            //title = view.findViewById(R.id.note_name);
 
-        imageView.setImageResource(note.getDrawableRes());
-        title.setText(note.getTitleRes());
+            imageView.setImageResource(note.getDrawableRes());
+            title.setText(note.getTitleRes());
+        }
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.example.simplenotes;
+package com.example.simplenotes.ui;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,9 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.simplenotes.R;
 import com.example.simplenotes.domain.Note;
 import com.example.simplenotes.domain.NotesRepository;
 
@@ -66,12 +66,7 @@ public class NotesFragment extends Fragment {
 
             View noteView = LayoutInflater.from(requireContext()).inflate(R.layout.item_note, notesList, false);
 
-            noteView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    openNoteDetails(note);
-                }
-            });
+            noteView.setOnClickListener(v -> openNoteDetails(note));
 
             ImageView image = noteView.findViewById(R.id.image);
             image.setImageResource(note.getDrawableRes());
