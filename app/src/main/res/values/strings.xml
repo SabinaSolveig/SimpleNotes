@@ -14,5 +14,10 @@
     <string name="mursik">Почесать пузико Мурзику</string>
     <string name="menu_about">О приложении</string>>
     <string name="fragment_navigation">Fragment navigation</string>
-    <string name="completed">Done</string>
+    <string name="completed">Выполнение</string>
+    <string name="notes_list">Список заметок</string>
+    <string name="note_details_title">Заметка</string>
+    <string name="save">Сохранить</string>
+    <string name="notes_title">Заметки</string>
+    <string name="note_update_title">Редактирование заметки</string>
 </resources>

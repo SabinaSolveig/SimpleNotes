@@ -1,31 +1,22 @@
 package com.example.simplenotes;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toolbar;
 
-import com.example.simplenotes.domain.Note;
-import com.example.simplenotes.ui.NoteDetailsFragment;
-import com.example.simplenotes.ui.NotesFragment;
-import com.example.simplenotes.ui.Publisher;
-import com.example.simplenotes.ui.PublisherHolder;
+import com.example.simplenotes.domain.router.AppRouter;
+import com.example.simplenotes.domain.router.RouterHolder;
 import com.example.simplenotes.ui.about.AboutFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
-public class MainActivity extends AppCompatActivity implements NotesFragment.OnNoteClicked, PublisherHolder {
+public class MainActivity extends AppCompatActivity implements RouterHolder {
 
-    private final Publisher publisher = new Publisher();
-    private boolean isLandscape = false;
+    private AppRouter router;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,20 +25,16 @@ public class MainActivity extends AppCompatActivity implements NotesFragment.OnN
 
         initView();
 
-        isLandscape = getResources().getBoolean(R.bool.isLandscape);
+        router = new AppRouter(getSupportFragmentManager());
 
-        if (!isLandscape) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-
-            Fragment fragment = fragmentManager.findFragmentById(R.id.container);
-
-            if (fragment == null) {
-
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, new NotesFragment())
-                        .commit();
-            }
+        if (savedInstanceState == null) {
+            router.showNotesList();
         }
+    }
+
+    @Override
+    public AppRouter getRouter() {
+        return router;
     }
 
     private void initView() {
@@ -98,26 +85,5 @@ public class MainActivity extends AppCompatActivity implements NotesFragment.OnN
                     .addToBackStack(null)
                     .commit();
         }
-    }
-
-    @Override
-    public void onNoteClicked(Note note) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-
-        if (isLandscape) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_note_details, NoteDetailsFragment.newInstance(note))
-                    .commit();
-        } else {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, NoteDetailsFragment.newInstance(note))
-                    .addToBackStack(null)
-                    .commit();
-        }
-    }
-
-    @Override
-    public Publisher getPublisher() {
-        return publisher;
     }
 }
