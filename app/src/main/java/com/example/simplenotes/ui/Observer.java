@@ -1,4 +1,4 @@
-package com.example.simplenotes;
+package com.example.simplenotes.ui;
 
 import com.example.simplenotes.domain.Note;
 

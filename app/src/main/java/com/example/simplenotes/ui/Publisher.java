@@ -1,6 +1,7 @@
-package com.example.simplenotes;
+package com.example.simplenotes.ui;
 
 import com.example.simplenotes.domain.Note;
+import com.example.simplenotes.ui.Observer;
 
 import java.util.ArrayList;
 import java.util.List;
