@@ -8,32 +8,34 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SortedList;
 
 import com.example.simplenotes.App;
 import com.example.simplenotes.R;
 import com.example.simplenotes.domain.model.Note;
-import com.example.simplenotes.domain.router.AppRouter;
-import com.example.simplenotes.domain.router.RouterHolder;
 
 import java.util.List;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
 
     private SortedList<Note> sortedList;
+    private final Fragment fragment;
     private OnNoteClicked clickListener;
+    private int longClickedPosition = -1;
 
-    public NotesAdapter() {
+    public NotesAdapter(Fragment fragment) {
+        this.fragment = fragment;
 
-        sortedList = new SortedList<>(Note.class, new  SortedList.Callback<Note>() {
+        sortedList = new SortedList<>(Note.class, new SortedList.Callback<Note>() {
 
             @Override
             public int compare(Note o1, Note o2) {
-                if(!o2.done && o1.done) {
+                if (!o2.done && o1.done) {
                     return 1;
                 }
-                if(o2.done && !o1.done) {
+                if (o2.done && !o1.done) {
                     return -1;
                 }
                 return (int) (o2.timestamp - o1.timestamp);
@@ -92,6 +94,10 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         sortedList.replaceAll(notes);
     }
 
+    public Note getItem(int position) {
+        return sortedList.get(position);
+    }
+
     public OnNoteClicked getClickListener() {
         return clickListener;
     }
@@ -100,15 +106,18 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         this.clickListener = clickListener;
     }
 
+    public int getLongClickedPosition() {
+        return longClickedPosition;
+    }
+
     interface OnNoteClicked {
         void onNoteClicked(Note note);
     }
 
-     class NoteViewHolder extends RecyclerView.ViewHolder {
+    class NoteViewHolder extends RecyclerView.ViewHolder {
 
         TextView noteText;
         CheckBox completed;
-        View delete;
 
         Note note;
 
@@ -117,9 +126,10 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         public NoteViewHolder(@NonNull final View itemView) {
             super(itemView);
 
+            fragment.registerForContextMenu(itemView);
+
             noteText = itemView.findViewById(R.id.note_text);
             completed = itemView.findViewById(R.id.completed);
-            delete = itemView.findViewById(R.id.delete);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -128,7 +138,14 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
                 }
             });
 
-            delete.setOnClickListener(view -> App.getInstance().getNoteDao().delete(note));
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    itemView.showContextMenu();
+                    longClickedPosition = getAdapterPosition();
+                    return true;
+                }
+            });
 
             completed.setOnCheckedChangeListener((compoundButton, checked) -> {
                 if (!silentUpdate) {

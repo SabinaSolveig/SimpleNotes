@@ -22,5 +22,4 @@
         android:hint="@string/note_text"
         android:minHeight="@dimen/minHeight"
         android:padding="@dimen/padding" />
-
 </LinearLayout>
