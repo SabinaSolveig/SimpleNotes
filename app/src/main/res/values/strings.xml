@@ -20,4 +20,6 @@
     <string name="save">Сохранить</string>
     <string name="notes_title">Заметки</string>
     <string name="note_update_title">Редактирование заметки</string>
+    <string name="action_edit">Редактировать</string>
+    <string name="action_delete">Удалить</string>
 </resources>

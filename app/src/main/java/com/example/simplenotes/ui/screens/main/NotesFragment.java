@@ -12,11 +12,14 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.simplenotes.App;
 import com.example.simplenotes.R;
 import com.example.simplenotes.domain.model.Note;
 import com.example.simplenotes.domain.router.AppRouter;
@@ -35,12 +38,6 @@ public class NotesFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         viewModel = new ViewModelProvider(this).get(NotesListViewModel.class);
-        viewModel.getNoteLiveData().observe(this, new Observer<List<Note>>() {
-            @Override
-            public void onChanged(List<Note> notes) {
-                adapter.setItems(notes);
-            }
-        });
     }
 
     @Nullable
@@ -55,15 +52,20 @@ public class NotesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Toolbar toolbar = view.findViewById(R.id.toolbar);
-
-        adapter = new NotesAdapter();
+        adapter = new NotesAdapter(this);
 
         adapter.setClickListener(new NotesAdapter.OnNoteClicked() {
             @Override
             public void onNoteClicked(Note note) {
                 AppRouter router = ((RouterHolder)getActivity()).getRouter();
                 router.editNote(note);
+            }
+        });
+
+        viewModel.getNoteLiveData().observe(getViewLifecycleOwner(), new Observer<List<Note>>() {
+            @Override
+            public void onChanged(List<Note> notes) {
+                adapter.setItems(notes);
             }
         });
 
@@ -83,5 +85,33 @@ public class NotesFragment extends Fragment {
                 router.editNote(null);
             }
         });
+    }
+
+    @Override
+    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        requireActivity().getMenuInflater().inflate(R.menu.menu_list_context, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+
+        if (item.getItemId() == R.id.action_edit) {
+
+            if (getActivity() instanceof RouterHolder){
+                Note note = adapter.getItem(adapter.getLongClickedPosition());
+                AppRouter router = ((RouterHolder)getActivity()).getRouter();
+                router.editNote(note);
+                return true;
+            }
+        }
+
+        if (item.getItemId() == R.id.action_delete) {
+            Note note = adapter.getItem(adapter.getLongClickedPosition());
+            viewModel.deleteNote(note);
+            return true;
+        }
+        return super.onContextItemSelected(item);
     }
 }
