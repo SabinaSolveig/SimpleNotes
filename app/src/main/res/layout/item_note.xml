@@ -4,45 +4,29 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:orientation="vertical">
+    android:paddingLeft="@dimen/margin16"
+    android:paddingRight="@dimen/margin16">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/note_text"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:minHeight="@dimen/text_view_minHeight"
+        tools:text="some text for testing" />
 
-        <ImageView
-            android:id="@+id/image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin16"
-            tools:src="@drawable/cat_blue" />
-
-        <TextView
-            android:id="@+id/note_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin16"
-            android:text="@string/markiz" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <CheckBox
+        android:id="@+id/completed"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginLeft="@dimen/marginLeft"
+        android:text="@string/completed" />
 
-        <CheckBox
-            android:id="@+id/completed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin16"
-            android:text="@string/completed" />
-
-        <ImageView
-            android:id="@+id/delete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin16"
-            android:src="@android:drawable/ic_notification_clear_all" />
-    </LinearLayout>
+    <ImageView
+        android:id="@+id/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/image_marginLeft"
+        android:src="@android:drawable/ic_notification_clear_all" />
 </LinearLayout>
