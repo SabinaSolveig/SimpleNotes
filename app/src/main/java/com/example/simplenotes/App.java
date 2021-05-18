@@ -4,10 +4,9 @@ import android.app.Application;
 
 import androidx.room.Room;
 
-import com.example.simplenotes.domain.date.AppDatabase;
 import com.example.simplenotes.domain.date.NoteDao;
 
-public class App extends Application {
+/*public class App extends Application {
 
     private AppDatabase database;
     private NoteDao noteDao;
@@ -47,4 +46,4 @@ public class App extends Application {
     public void setNoteDao(NoteDao noteDao) {
         this.noteDao = noteDao;
     }
-}
+}*/

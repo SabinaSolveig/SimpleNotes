@@ -3,28 +3,38 @@ package com.example.simplenotes.domain.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
-
 import java.util.Objects;
 
-@Entity
 public class Note implements Parcelable {
 
-    @PrimaryKey(autoGenerate = true)
-    public int uid;
-
-    @ColumnInfo(name = "text")
+    private String id;
     public String text;
-
-    @ColumnInfo(name = "timestamp")
     public long timestamp;
-
-    @ColumnInfo(name = "done")
     public boolean done;
 
     public Note() {
+    }
+
+    public Note(String id, Note note) {
+        this.id = id;
+        this.text = note.text;
+        this.timestamp = note.timestamp;
+        this.done = note.done;
+    }
+
+    public Note(String id, String text, long timestamp, boolean done) {
+        this.id = id;
+        this.text = text;
+        this.timestamp = timestamp;
+        this.done = done;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override
@@ -34,7 +44,7 @@ public class Note implements Parcelable {
 
         Note note = (Note) o;
 
-        if (uid != note.uid) return false;
+        if (!id.equals(note.id)) return false;
         if (timestamp != note.timestamp) return false;
         if (done != note.done) return false;
         return Objects.equals(text, note.text);
@@ -42,15 +52,11 @@ public class Note implements Parcelable {
 
     @Override
     public int hashCode() {
-        int result = uid;
-        result = 31 * result + (text != null ? text.hashCode() : 0);
-        result = 31 * result + (int) (timestamp ^ (timestamp >>> 32));
-        result = 31 * result + (done ? 1 : 0);
-        return result;
+        return Objects.hash(id, text, timestamp, done);
     }
 
     protected Note(Parcel in) {
-        uid = in.readInt();
+        id = in.readString();
         text = in.readString();
         timestamp = in.readLong();
         done = in.readByte() != 0;
@@ -58,7 +64,7 @@ public class Note implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(uid);
+        dest.writeString(id);
         dest.writeString(text);
         dest.writeLong(timestamp);
         dest.writeByte((byte) (done ? 1 : 0));
