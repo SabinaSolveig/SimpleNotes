@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -17,9 +16,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.example.simplenotes.App;
 import com.example.simplenotes.R;
 import com.example.simplenotes.domain.model.Note;
 import com.example.simplenotes.domain.router.AppRouter;
@@ -57,7 +54,7 @@ public class NotesFragment extends Fragment {
         adapter.setClickListener(new NotesAdapter.OnNoteClicked() {
             @Override
             public void onNoteClicked(Note note) {
-                AppRouter router = ((RouterHolder)getActivity()).getRouter();
+                AppRouter router = ((RouterHolder) getActivity()).getRouter();
                 router.editNote(note);
             }
         });
@@ -68,6 +65,10 @@ public class NotesFragment extends Fragment {
                 adapter.setItems(notes);
             }
         });
+
+        if (savedInstanceState == null) {
+            viewModel.requestNotes();
+        }
 
         RecyclerView list = view.findViewById(R.id.list);
         RecyclerView.LayoutManager lm = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
@@ -81,7 +82,7 @@ public class NotesFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppRouter router = ((RouterHolder)getActivity()).getRouter();
+                AppRouter router = ((RouterHolder) getActivity()).getRouter();
                 router.editNote(null);
             }
         });
@@ -99,9 +100,9 @@ public class NotesFragment extends Fragment {
 
         if (item.getItemId() == R.id.action_edit) {
 
-            if (getActivity() instanceof RouterHolder){
+            if (getActivity() instanceof RouterHolder) {
                 Note note = adapter.getItem(adapter.getLongClickedPosition());
-                AppRouter router = ((RouterHolder)getActivity()).getRouter();
+                AppRouter router = ((RouterHolder) getActivity()).getRouter();
                 router.editNote(note);
                 return true;
             }

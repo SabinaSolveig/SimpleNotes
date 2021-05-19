@@ -12,9 +12,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SortedList;
 
-import com.example.simplenotes.App;
 import com.example.simplenotes.R;
 import com.example.simplenotes.domain.model.Note;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
@@ -53,7 +53,8 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
             @Override
             public boolean areItemsTheSame(Note item1, Note item2) {
-                return item1.uid == item2.uid;
+                //return item1.uid == item2.uid;
+                return item1.getId().equals(item2.getId());
             }
 
             @Override
@@ -150,7 +151,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             completed.setOnCheckedChangeListener((compoundButton, checked) -> {
                 if (!silentUpdate) {
                     note.done = checked;
-                    App.getInstance().getNoteDao().update(note);
+                    //update
                 }
                 updateStrokeOut();
             });

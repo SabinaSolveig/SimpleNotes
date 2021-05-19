@@ -12,17 +12,14 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-import com.example.simplenotes.App;
 import com.example.simplenotes.R;
 import com.example.simplenotes.domain.model.Note;
 import com.example.simplenotes.domain.router.AppRouter;
 import com.example.simplenotes.domain.router.RouterHolder;
 import com.example.simplenotes.ui.screens.main.NotesListViewModel;
 
-import static androidx.core.content.ContextCompat.getSystemService;
 
 public class NoteDetailsFragment extends Fragment {
 
