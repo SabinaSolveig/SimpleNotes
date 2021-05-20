@@ -1,5 +1,7 @@
 package com.example.simplenotes.ui.screens.main;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -88,6 +90,10 @@ public class NotesFragment extends Fragment {
         });
     }
 
+    public void updateNote(Note note) {
+        viewModel.updateNote(note);
+    }
+
     @Override
     public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -109,10 +115,30 @@ public class NotesFragment extends Fragment {
         }
 
         if (item.getItemId() == R.id.action_delete) {
-            Note note = adapter.getItem(adapter.getLongClickedPosition());
-            viewModel.deleteNote(note);
+            showAlertDialog();
             return true;
         }
         return super.onContextItemSelected(item);
+    }
+
+    private void showAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle(R.string.alert_dialog_title)
+                .setMessage(R.string.alert_dialog_message)
+                .setCancelable(false)
+                .setPositiveButton(R.string.positive, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Note note = adapter.getItem(adapter.getLongClickedPosition());
+                        viewModel.deleteNote(note);
+                    }
+                })
+                .setNegativeButton(R.string.negative, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .show();
     }
 }

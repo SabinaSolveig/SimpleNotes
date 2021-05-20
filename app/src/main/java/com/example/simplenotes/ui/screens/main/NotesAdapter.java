@@ -14,13 +14,12 @@ import androidx.recyclerview.widget.SortedList;
 
 import com.example.simplenotes.R;
 import com.example.simplenotes.domain.model.Note;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
 
-    private SortedList<Note> sortedList;
+    private final SortedList<Note> sortedList;
     private final Fragment fragment;
     private OnNoteClicked clickListener;
     private int longClickedPosition = -1;
@@ -53,7 +52,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
             @Override
             public boolean areItemsTheSame(Note item1, Note item2) {
-                //return item1.uid == item2.uid;
                 return item1.getId().equals(item2.getId());
             }
 
@@ -132,30 +130,20 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             noteText = itemView.findViewById(R.id.note_text);
             completed = itemView.findViewById(R.id.completed);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    getClickListener().onNoteClicked(note);
-                }
-            });
+            itemView.setOnClickListener(view -> getClickListener().onNoteClicked(note));
 
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    itemView.showContextMenu();
-                    longClickedPosition = getAdapterPosition();
-                    return true;
-                }
+            itemView.setOnLongClickListener(v -> {
+                itemView.showContextMenu();
+                longClickedPosition = getAdapterPosition();
+                return true;
             });
 
             completed.setOnCheckedChangeListener((compoundButton, checked) -> {
                 if (!silentUpdate) {
                     note.done = checked;
-                    //update
                 }
                 updateStrokeOut();
             });
-
         }
 
         public void bind(Note note) {
