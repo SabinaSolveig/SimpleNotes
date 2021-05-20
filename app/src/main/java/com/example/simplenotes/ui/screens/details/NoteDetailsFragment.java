@@ -1,5 +1,6 @@
 package com.example.simplenotes.ui.screens.details;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.example.simplenotes.R;
@@ -73,6 +75,9 @@ public class NoteDetailsFragment extends Fragment {
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == R.id.action_save) {
                     viewModel.saveNote(note, editText.getText().toString(), bundle == null);
+                    requireContext();
+                    InputMethodManager keyboard = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    keyboard.hideSoftInputFromWindow(editText.getWindowToken(), 0);
 
                     AppRouter router = ((RouterHolder) getActivity()).getRouter();
                     router.showNotesList();

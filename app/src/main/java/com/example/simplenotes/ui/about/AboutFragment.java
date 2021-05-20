@@ -20,14 +20,12 @@ public class AboutFragment extends Fragment {
 
     public static final String TAG = "AboutFragment";
 
-    private AboutViewModel aboutViewModel;
-
     private TextView textView;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        aboutViewModel = new ViewModelProvider(this).get(AboutViewModel.class);
+        AboutViewModel aboutViewModel = new ViewModelProvider(this).get(AboutViewModel.class);
         View root = inflater.inflate(R.layout.fragment_about, container, false);
         textView = root.findViewById(R.id.text_about);
         aboutViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {

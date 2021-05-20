@@ -1,19 +1,10 @@
 package com.example.simplenotes.domain.date;
 
-import androidx.annotation.NonNull;
-
 import com.example.simplenotes.domain.model.Note;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,28 +23,25 @@ public class FirestoreNotesRepository implements NotesRepository{
         fireStore.collection(NOTES)
                 .orderBy(TIMESTAMP)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
 
-                            ArrayList<Note> tmp = new ArrayList<>();
+                        ArrayList<Note> tmp = new ArrayList<>();
 
-                            List<DocumentSnapshot> docs = task.getResult().getDocuments();
+                        List<DocumentSnapshot> docs = task.getResult().getDocuments();
 
-                            for (DocumentSnapshot doc : docs) {
-                                String id = doc.getId();
-                                String text = doc.getString(TEXT);
-                                long timestamp = doc.getLong(TIMESTAMP);
-                                boolean done = doc.getBoolean(DONE);
+                        for (DocumentSnapshot doc : docs) {
+                            String id = doc.getId();
+                            String text = doc.getString(TEXT);
+                            long timestamp = doc.getLong(TIMESTAMP);
+                            boolean done = doc.getBoolean(DONE);
 
-                                tmp.add(new Note(id, text, timestamp, done));
-                            }
-                            callback.onSuccess(tmp);
-
-                        } else {
-                            callback.onError(task.getException());
+                            tmp.add(new Note(id, text, timestamp, done));
                         }
+                        callback.onSuccess(tmp);
+
+                    } else {
+                        callback.onError(task.getException());
                     }
                 });
     }
@@ -68,15 +56,12 @@ public class FirestoreNotesRepository implements NotesRepository{
 
         fireStore.collection(NOTES)
                 .add(data)
-                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                .addOnCompleteListener(task -> {
 
-                        if (task.isSuccessful()) {
-                            callback.onSuccess(new Note(task.getResult().getId(), note));
-                        } else {
-                            callback.onError(task.getException());
-                        }
+                    if (task.isSuccessful()) {
+                        callback.onSuccess(new Note(task.getResult().getId(), note));
+                    } else {
+                        callback.onError(task.getException());
                     }
                 });
     }
@@ -91,18 +76,15 @@ public class FirestoreNotesRepository implements NotesRepository{
 
         fireStore.collection(NOTES)
                 .document(note.getId())
-                .set(data)
-                /*.addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onSuccess(@NonNull Task<DocumentReference> task) {
+                .update(data)
+                .addOnCompleteListener(task -> {
 
-                        if (task.isSuccessful()) {
-                            callback.onSuccess(new Note(task.getResult().getId(), note));
-                        } else {
-                            callback.onError(task.getException());
-                        }
+                    if (task.isSuccessful()) {
+                        callback.onSuccess(new Object());
+                    } else {
+                        callback.onError(task.getException());
                     }
-                })*/;
+                });
     }
 
     @Override
@@ -111,15 +93,12 @@ public class FirestoreNotesRepository implements NotesRepository{
         fireStore.collection(NOTES)
                 .document(note.getId())
                 .delete()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
+                .addOnCompleteListener(task -> {
 
-                        if (task.isSuccessful()) {
-                            callback.onSuccess(new Object());
-                        } else {
-                            callback.onError(task.getException());
-                        }
+                    if (task.isSuccessful()) {
+                        callback.onSuccess(new Object());
+                    } else {
+                        callback.onError(task.getException());
                     }
                 });
     }
